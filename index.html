@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sınav Çalışma Notları</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --card: #1a1d27;
+      --border: #2a2d3a;
+      --text: #e8eaf0;
+      --muted: #8b8fa8;
+      --accent: #4f8ef7;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      padding: 3rem 1.5rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    header h1 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* ── STATS BAR ── */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-n {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .stat-l {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform .2s, border-color .2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+    }
+
+    .card-top {
+      padding: 1.5rem 1.5rem 1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .card-info h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .card-info p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* topic pills */
+    .topics {
+      padding: 0 1.5rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .pill {
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+    }
+
+    /* repeat badge */
+    .repeat-row {
+      padding: 0 1.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge {
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    /* buttons */
+    .btns {
+      padding: 0 1.5rem 1.5rem;
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 9px 0;
+      border-radius: 9px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: opacity .15s;
+    }
+
+    .btn:hover { opacity: 0.85; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.07);
+      color: var(--text);
+    }
+
+    /* ── INFO BANNER ── */
+    .banner {
+      max-width: 1100px;
+      margin: 0 auto 0;
+      padding: 0 1.5rem 1.5rem;
+    }
+
+    .banner-inner {
+      background: rgba(79, 142, 247, 0.08);
+      border: 1px solid rgba(79, 142, 247, 0.25);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .banner-inner strong {
+      color: var(--text);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+      margin-top: 1rem;
+    }
+
+    /* ── MODAL ── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .overlay.open { display: flex; }
+
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 780px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-header h3 { font-size: 1rem; font-weight: 600; }
+
+    .close-btn {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.07);
+      border: none;
+      color: var(--text);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .modal-body iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 500px;
+      border: none;
+    }
+
+    @media (max-width: 500px) {
+      .stats { gap: 1.5rem; }
+      header h1 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Sınav Çalışma Notları</h1>
+  <p>2021-2025 final sınavları analizi · Tekrar eden sorular · Konu anlatımları</p>
+</header>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-n" style="color:#4f8ef7">4</div>
+    <div class="stat-l">Ders</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n" style="color:#1D9E75">~40</div>
+    <div class="stat-l">Birebir tekrar soru</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n" style="color:#EF9F27">4 yıl</div>
+    <div class="stat-l">Sınav analizi</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n" style="color:#e74c3c">100+</div>
+    <div class="stat-l">Soru + açıklama</div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <!-- FİZYOLOJİ -->
+  <div class="card">
+    <div class="card-top">
+      <div class="icon" style="background:rgba(29,158,117,0.15)">🫀</div>
+      <div class="card-info">
+        <h2>Fizyoloji</h2>
+        <p>7 bölüm · ~50 soru/sınav · En kapsamlı ders</p>
+      </div>
+    </div>
+    <div class="topics">
+      <span class="pill">GİS</span>
+      <span class="pill">KVS</span>
+      <span class="pill">Nörofizyoloji</span>
+      <span class="pill">Endokrin</span>
+      <span class="pill">Solunum</span>
+      <span class="pill">Böbrek</span>
+      <span class="pill">Üreme</span>
+    </div>
+    <div class="repeat-row">
+      <span class="badge" style="background:rgba(29,158,117,0.15);color:#1D9E75">~10 birebir soru</span>
+      <span class="badge" style="background:rgba(239,159,39,0.15);color:#EF9F27">~15 çok benzer</span>
+    </div>
+    <div class="btns">
+      <a href="pdfs/fizyoloji_detayli_konu_anlatimi.pdf" target="_blank" class="btn btn-primary">PDF Aç</a>
+      <a href="pdfs/fizyoloji_detayli_konu_anlatimi.pdf" download class="btn btn-secondary">İndir</a>
+    </div>
+  </div>
+
+  <!-- ANATOMİ -->
+  <div class="card">
+    <div class="card-top">
+      <div class="icon" style="background:rgba(41,128,185,0.15)">🧠</div>
+      <div class="card-info">
+        <h2>Anatomi</h2>
+        <p>5 bölüm · ~32 soru/sınav · En yüksek tekrar oranı</p>
+      </div>
+    </div>
+    <div class="topics">
+      <span class="pill">Nöroanatomi</span>
+      <span class="pill">Karın</span>
+      <span class="pill">Toraks</span>
+      <span class="pill">Baş & Boyun</span>
+      <span class="pill">Pelvis</span>
+    </div>
+    <div class="repeat-row">
+      <span class="badge" style="background:rgba(41,128,185,0.15);color:#2980b9">~13 birebir soru</span>
+      <span class="badge" style="background:rgba(239,159,39,0.15);color:#EF9F27">~5 çok benzer</span>
+    </div>
+    <div class="btns">
+      <a href="pdfs/anatomi_detayli_konu_anlatimi.pdf" target="_blank" class="btn btn-primary" style="background:#2980b9">PDF Aç</a>
+      <a href="pdfs/anatomi_detayli_konu_anlatimi.pdf" download class="btn btn-secondary">İndir</a>
+    </div>
+  </div>
+
+  <!-- FARMAKOLOJİ -->
+  <div class="card">
+    <div class="card-top">
+      <div class="icon" style="background:rgba(142,68,173,0.15)">💊</div>
+      <div class="card-info">
+        <h2>Farmakoloji</h2>
+        <p>5 bölüm · ~10 soru/sınav · Oransal en yüksek tekrar</p>
+      </div>
+    </div>
+    <div class="topics">
+      <span class="pill">Farmakodinamik</span>
+      <span class="pill">Farmakokinetik</span>
+      <span class="pill">CYP450</span>
+      <span class="pill">Toksikoloji</span>
+      <span class="pill">Genetik</span>
+    </div>
+    <div class="repeat-row">
+      <span class="badge" style="background:rgba(142,68,173,0.15);color:#8e44ad">~5 birebir soru</span>
+      <span class="badge" style="background:rgba(239,159,39,0.15);color:#EF9F27">~6 çok benzer</span>
+    </div>
+    <div class="btns">
+      <a href="pdfs/farmakoloji_detayli_konu_anlatimi.pdf" target="_blank" class="btn btn-primary" style="background:#8e44ad">PDF Aç</a>
+      <a href="pdfs/farmakoloji_detayli_konu_anlatimi.pdf" download class="btn btn-secondary">İndir</a>
+    </div>
+  </div>
+
+  <!-- PATOLOJİ -->
+  <div class="card">
+    <div class="card-top">
+      <div class="icon" style="background:rgba(192,57,43,0.15)">🔬</div>
+      <div class="card-info">
+        <h2>Patoloji</h2>
+        <p>5 bölüm · ~8 soru/sınav · Soru numaraları bile hizalı</p>
+      </div>
+    </div>
+    <div class="topics">
+      <span class="pill">Hücre Zedelenmesi</span>
+      <span class="pill">Apoptoz</span>
+      <span class="pill">İnflamasyon</span>
+      <span class="pill">Tromboz</span>
+      <span class="pill">İmmün Yetmezlik</span>
+    </div>
+    <div class="repeat-row">
+      <span class="badge" style="background:rgba(192,57,43,0.15);color:#c0392b">~2 birebir soru</span>
+      <span class="badge" style="background:rgba(239,159,39,0.15);color:#EF9F27">~3 çok benzer</span>
+    </div>
+    <div class="btns">
+      <a href="pdfs/patoloji_detayli_konu_anlatimi.pdf" target="_blank" class="btn btn-primary" style="background:#c0392b">PDF Aç</a>
+      <a href="pdfs/patoloji_detayli_konu_anlatimi.pdf" download class="btn btn-secondary">İndir</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="banner">
+  <div class="banner-inner">
+    <strong>Nasıl kullanılır?</strong> Her PDF içinde kırmızı/turuncu kutularda <strong>"SINAV SORUSU"</strong> yazan satırlar en öncelikli ezberlenecek yerler. Önce bu satırları oku, sonra soru bankalarını çöz, son olarak yanlışlarına dön.
+    <br/><br/>
+    <strong>Öncelik sırası:</strong> Farmakoloji (1 gün) → Anatomi nöroanatomi (1 gün) → Fizyoloji GİS + KVS (2 gün) → Fizyoloji endokrin + solunum + böbrek (2 gün) → Patoloji (yarım gün) → Genel tekrar (1 gün)
+  </div>
+</div>
+
+<footer>
+  2021-22 · 2022-23 · 2023-24 · 2024-25 final sınavları analiz edilerek hazırlanmıştır.
+</footer>
+
+</body>
+</html>
